@@ -6,23 +6,34 @@
     let email = '';
     let message = '';
     let rating = 0;
+    let turnstile_token = '';
     let hoverRating = 0;
 
-    function handleSubmit(e: Event) {
+    async function handleSubmit(e: Event) {
         e.preventDefault();
         // Aquí puedes agregar la lógica para enviar el formulario
         console.log({name, email, message, rating});
+        const response = await fetch(import.meta.env.VITE_VALIDATION_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'CF-TURNSTILE-TOKEN': turnstile_token
+            },
+            body: JSON.stringify({name, email, message, rating})
+        })
+        console.log(response)
     }
 
     $: isFormValid = name && email && message;
-    // $: isFormValid = false;
 
     // if using synchronous loading, will be called once the DOM is ready
     turnstile?.ready(function () {
         turnstile.render("#turnstile-container", {
             sitekey: import.meta.env.VITE_TURNSTILE_KEY,
             callback: function (token) {
-                console.log(`Challenge Success ${token}`);
+                // console.log(`Challenge Success ${token}`);
+                turnstile_token = token;
             },
         });
     });
