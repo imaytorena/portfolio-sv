@@ -10,7 +10,7 @@
     title: "Full Stack Developer",
     description: "I am a web developer passionate about creating unique and functional digital experiences. " +
             "I really enjoy working with modern technologies or frameworks.",
-    profileImage: "/img.png"
+    profileImage: "/images/img.png"
   };
 
   const socialLinks = [
