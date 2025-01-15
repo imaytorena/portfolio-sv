@@ -11,11 +11,12 @@
 
     async function handleSubmit(e: Event) {
         e.preventDefault();
+        const new_token = turnstile?.getResponse("#turnstile-container");
         const response = await fetch(import.meta.env.VITE_VALIDATION_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'CF-TURNSTILE-TOKEN': turnstile_token
+                'CF-TURNSTILE-TOKEN': new_token
             },
             body: JSON.stringify({name, email, message, rating})
         });
@@ -24,16 +25,18 @@
         message = ''
     }
 
-    $: isFormValid = name && email && message;
+    $: isFormValid = name && email && message && turnstile_token;
 
-    turnstile?.ready(function () {
+    const widgetId = turnstile?.ready(function () {
         turnstile.render("#turnstile-container", {
             sitekey: import.meta.env.VITE_TURNSTILE_KEY,
             callback: function (token) {
+                console.log(token);
                 turnstile_token = token;
             },
         });
     });
+    console.log(widgetId);
 </script>
 
 <div class="section contact-section">
