@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Fa from 'svelte-fa';
-    import {faStar} from '@fortawesome/free-solid-svg-icons';
+    // import Fa from 'svelte-fa';
+    // import {faStar} from '@fortawesome/free-solid-svg-icons';
 
     let name = '';
     let email = '';
@@ -11,28 +11,25 @@
 
     async function handleSubmit(e: Event) {
         e.preventDefault();
-        // Aquí puedes agregar la lógica para enviar el formulario
-        console.log({name, email, message, rating});
         const response = await fetch(import.meta.env.VITE_VALIDATION_URL, {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
                 'CF-TURNSTILE-TOKEN': turnstile_token
             },
             body: JSON.stringify({name, email, message, rating})
-        })
-        console.log(response)
+        });
+        name = '';
+        email = '';
+        message = ''
     }
 
     $: isFormValid = name && email && message;
 
-    // if using synchronous loading, will be called once the DOM is ready
     turnstile?.ready(function () {
         turnstile.render("#turnstile-container", {
             sitekey: import.meta.env.VITE_TURNSTILE_KEY,
             callback: function (token) {
-                // console.log(`Challenge Success ${token}`);
                 turnstile_token = token;
             },
         });
