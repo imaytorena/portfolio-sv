@@ -16,7 +16,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'CF-TURNSTILE-TOKEN': new_token
+                'cf-turnstile-token': new_token
             },
             body: JSON.stringify({name, email, message, rating})
         });
