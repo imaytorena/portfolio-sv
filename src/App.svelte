@@ -27,15 +27,23 @@
       url: "/",
       tools: ["svelte", "css", "typescript", "turnstile"],
       image: "/images/portfolio.png",
-      site: "javier.maytorena.xyz"
+      site: "portfolio.maytorena.xyz"
+    },
+    {
+      title: "Easy Library",
+      description: "Simple crud for an scholar library, its suppose to be able to scale",
+      url: "https://easylibrary.maytorena.xyz",
+      tools: ["nexjs", "laravel", "vercel", "mysql"],
+      image: "/images/easy-library.png",
+      site: "easylibrary.maytorena.xyz"
     },
     {
       title: "Counter",
       description: "Project to test my knowledge using a funny YouTube video as an example",
       // https://youtu.be/dRsuD_ygvOc
       tools: ["sveltekit", "cloudflare-pages", "cloudflare-workers", "cloudflare-kv"],
-      url: "https://counter.developmers.com",
-      site: "counter.developmers.com",
+      url: "https://counter.maytorena.xyz",
+      site: "counter.maytorena.xyz",
       image: "/images/counter.png"
     }
   ];
