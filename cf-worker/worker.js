@@ -28,16 +28,23 @@ export default {
                 return new Response(JSON.stringify({message: 'The provided Turnstile token was not valid!'}), {status: 400});
             }
 
-            const {name, email, message} = await request.json()
+            const {name, email, message, terms_conditions, contacted} = await request.json()
+
+            if (!name && !email && !message && !terms_conditions) {
+                return new Response(JSON.stringify({message: 'You are not sending a valid resource'}), {status: 422});
+            }
+
             const webhook_url = `${env.WEBHOOOK_URL}${env.WEBHOOOK_CHANNEL_ID}/${env.WEBHOOOK_TOKEN}?wait=true`
+            const initials = name.split(" ");
+            const username = `${name} ${(contacted === "false") ? "❌" : ""}`;
             let discordMessage = await fetch(webhook_url, {
                 method: "POST",
                 headers: {'content-type': 'application/json'},
                 body: JSON.stringify({
-                    content: "@here\n" +
-                        `**${name}**\n` +
-                        `*${email}*\n` +
-                        `\n${message}`
+                    username: username, //I DONT WANT TO BE CONTACT
+                    avatar_url: `https://avatar.iran.liara.run/username?username=${initials[0]}+${initials[1] ? initials[1] : name[1] ?? ""}`,
+                    content: `${!!contacted ? `\`${email}\`` : ""}` +
+                        `\n\n${message}\n\n*This user ${!(terms_conditions === "false") ? "DO NOT " : ""}accepted the terms and conditions*`
                 })
             });
             // console.log(discordMessage);
@@ -46,10 +53,8 @@ export default {
                 console.error({discordMessage});
                 return new Response(JSON.stringify({message: 'The message service is not available now'}), {status: 400});
             }
-            // The Turnstile token was successfuly validated. Proceed with your application logic.
-            // Validate login, redirect user, etc.
-            // For this demo, we just echo the "/siteverify" response:
-            console.log(outcome);
+
+            // console.log(outcome);
             return new Response(JSON.stringify({
                 message: 'Message was successfuly sent!!'
             }), {status: 200});
