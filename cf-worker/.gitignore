@@ -1,0 +1,6 @@
+/node_modules/
+/codealike.json
+/package-lock.json
+.dev.vars
+/.dev.vars
+.wrangler/
