@@ -8,15 +8,15 @@
 <footer>
   <div class="footer-content">
     <div class="footer-section">
-      <h3 class="gradient-text">¡Gracias por visitar!</h3>
-      <p>Siempre estoy abierto a nuevas oportunidades y colaboraciones.</p>
+      <h3 class="gradient-text">¡Thank you for visiting!</h3>
+      <p>I'm always open to new opportunities and/or collaborations</p>
     </div>
     
     <div class="footer-section">
       <p class="made-with">
         Made with <Fa icon={faHeart} color="#ff6b6b"/> and Svelte
       </p>
-      <p class="copyright">© {currentYear} Javier Maytorena. Todos los derechos reservados.</p>
+      <p class="copyright">© {currentYear} Javier Maytorena. All rights reserved.</p>
     </div>
   </div>
 </footer>

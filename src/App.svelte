@@ -4,6 +4,7 @@
   import Projects from './lib/Projects.svelte';
   import ContactForm from './lib/ContactForm.svelte';
   import Footer from './lib/Footer.svelte';
+  import { SvelteToast } from '@zerodevx/svelte-toast';
 
   const personalInfo = {
     name: "Javier Maytorena",
@@ -57,6 +58,7 @@
   <Header {...personalInfo} />
   <Projects {projects} />
   <ContactForm />
+  <SvelteToast />
 </main>
 
 <Footer />
