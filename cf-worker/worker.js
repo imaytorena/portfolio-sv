@@ -24,7 +24,7 @@ export default {
             const outcome = await result.json();
 
             if (!outcome.success) {
-                console.error({outcome, discordMessage});
+                console.error({outcome});
                 return new Response(JSON.stringify({message: 'The provided Turnstile token was not valid!'}), {status: 400});
             }
 
