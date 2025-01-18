@@ -1,3 +1,7 @@
 name = "portfolio-worker"
 
-compatibility_date = "2022-09-26"
+compatibility_date = "2025-01-17"
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = true
