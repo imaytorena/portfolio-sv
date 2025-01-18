@@ -37,27 +37,28 @@ export default {
             const webhook_url = `${env.WEBHOOOK_URL}${env.WEBHOOOK_CHANNEL_ID}/${env.WEBHOOOK_TOKEN}?wait=true`
             const initials = name.split(" ");
             const username = `${name} ${(contacted === "false") ? "❌" : ""}`;
-            let discordMessage = await fetch(webhook_url, {
-                method: "POST",
-                headers: {'content-type': 'application/json'},
-                body: JSON.stringify({
-                    username: username, //I DONT WANT TO BE CONTACT
-                    avatar_url: `https://avatar.iran.liara.run/username?username=${initials[0]}+${initials[1] ? initials[1] : name[1] ?? ""}`,
-                    content: `${!!contacted ? `\`${email}\`` : ""}` +
-                        `\n\n${message}\n\n*This user ${!(terms_conditions === "false") ? "DO NOT " : ""}accepted the terms and conditions*`
-                })
-            });
-            // console.log(discordMessage);
+            try {
 
-            if (!discordMessage.ok) {
-                console.error({discordMessage});
-                return new Response(JSON.stringify({message: 'The message service is not available now'}), {status: 400});
+                let discordMessage = await fetch(webhook_url, {
+                    method: "POST",
+                    headers: {'content-type': 'application/json'},
+                    body: JSON.stringify({
+                        username: username, //I DONT WANT TO BE CONTACT
+                        avatar_url: `https://avatar.iran.liara.run/username?username=${initials[0]}+${initials[1] ? initials[1] : name[1] ?? ""}`,
+                        content: `${!!contacted ? `\`${email}\`` : ""}` +
+                            `\n\n${message}\n\n*This user ${!(terms_conditions === "false") ? "DO NOT " : ""}accepted the terms and conditions*`
+                    })
+                });
+                if (!discordMessage.ok) {
+                    throw new Error('There was a problem with dm service reason');
+                }
+                return new Response(JSON.stringify({
+                    message: 'Message was successfuly sent!!'
+                }), {status: 200});
+            } catch (error) {
+                return new Response(JSON.stringify({message: error.message ?? 'The message service is not available now'}), {status: 500});
             }
 
-            // console.log(outcome);
-            return new Response(JSON.stringify({
-                message: 'Message was successfuly sent!!'
-            }), {status: 200});
         }
 
         async function handleOptions(request) {
