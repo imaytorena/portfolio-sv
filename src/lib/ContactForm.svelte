@@ -5,7 +5,8 @@
     let name = '';
     let email = '';
     let message = '';
-    let rating = 0;
+    let terms_conditions = false;
+    let contacted = false;
     let turnstile_token = '';
     let hoverRating = 0;
 
@@ -18,14 +19,14 @@
                 'Content-Type': 'application/json',
                 'cf-turnstile-token': new_token
             },
-            body: JSON.stringify({name, email, message, rating})
+            body: JSON.stringify({name, email, message, terms_conditions, contacted})
         });
         name = '';
         email = '';
-        message = ''
+        message = '';
     }
 
-    $: isFormValid = name && email && message && turnstile_token;
+    $: isFormValid = name && email && message && terms_conditions && turnstile_token;
 
     const widgetId = turnstile?.ready(function () {
         turnstile.render("#turnstile-container", {
@@ -74,32 +75,34 @@
                     rows="4"
             ></textarea>
         </div>
+        <div class="bottom-group">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
 
-        <!--    <div class="rating-container">-->
-        <!--      <p>¿Qué te parece mi portfolio?</p>-->
-        <!--      <div class="stars"-->
-        <!--        on:mouseleave={() => (hoverRating = 0)}>-->
-        <!--        {#each Array(5) as _, i}-->
-        <!--          <button-->
-        <!--            type="button"-->
-        <!--            class="star-btn"-->
-        <!--            on:mouseover={() => (hoverRating = i + 1)}-->
-        <!--            on:click={() => (rating = i + 1)}-->
-        <!--          >-->
-        <!--            <Fa-->
-        <!--              icon={faStar}-->
-        <!--              class={hoverRating || rating > i ? 'star-active' : 'star-inactive'}-->
-        <!--            />-->
-        <!--          </button>-->
-        <!--        {/each}-->
-        <!--      </div>-->
-        <!--    </div>-->
-        <div
-                id="turnstile-container"
-                data-sitekey={import.meta.env.VITE_TURNSTILE_KEY}
-                data-callback="javascriptCallback"
-                style="display: flex; justify-content: center; margin-bottom: 1.5rem;"
-        ></div>
+                <label class="check-agreement-group" for="terms_conditions">
+                    <input id="terms_conditions"
+                           type="checkbox"
+                           bind:value={terms_conditions}
+                           required
+                           checked={terms_conditions}/>
+                    I agree to the <a href="/terms-conditions">terms and conditions</a>
+                </label>
+
+                <label class="check-agreement-group" for="contact_me">
+                    <input id="contact_me"
+                           type="checkbox"
+                           bind:value={contacted}
+                           checked={contacted}/>
+                    I agree to be contacted by email
+                </label>
+            </div>
+            <div
+                    id="turnstile-container"
+                    class="turnstile-container"
+
+                    data-sitekey={import.meta.env.VITE_TURNSTILE_KEY}
+                    data-callback="javascriptCallback"
+            ></div>
+        </div>
         <button type="submit" class="submit-btn" disabled={!isFormValid}>
             Enviar mensaje
         </button>
@@ -142,39 +145,6 @@
         box-shadow: 0 0 0 3px rgba(70, 53, 177, 0.1);
     }
 
-    /*.rating-container {*/
-    /*  margin: 1.5rem 0;*/
-    /*  text-align: center;*/
-    /*}*/
-
-    /*.stars {*/
-    /*  display: flex;*/
-    /*  gap: 0.5rem;*/
-    /*  justify-content: center;*/
-    /*  margin-top: 0.5rem;*/
-    /*}*/
-
-    /*.star-btn {*/
-    /*  background: none;*/
-    /*  border: none;*/
-    /*  cursor: pointer;*/
-    /*  font-size: 1.5rem;*/
-    /*  padding: 0.25rem;*/
-    /*  transition: transform 0.2s ease;*/
-    /*}*/
-
-    /*.star-btn:hover {*/
-    /*  transform: scale(1.1);*/
-    /*}*/
-
-    /*.star-active {*/
-    /*  color: var(--accent);*/
-    /*}*/
-
-    /*.star-inactive {*/
-    /*  color: #ccc;*/
-    /*}*/
-
     .submit-btn {
         width: 100%;
         padding: 1rem;
@@ -196,5 +166,30 @@
     .submit-btn:disabled {
         opacity: 0.7;
         cursor: not-allowed;
+    }
+
+    .bottom-group {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .turnstile-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .check-agreement-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+    }
+
+    .check-agreement-group input {
+        width: min-content;
     }
 </style>
