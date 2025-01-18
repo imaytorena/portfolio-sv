@@ -9,7 +9,7 @@
     let terms_conditions = false;
     let contacted = true;
     let turnstile_token = '';
-    let hoverRating = 0;
+    let alreadyUsed = false;
 
     async function handleSubmit(e: Event) {
         e.preventDefault();
@@ -30,6 +30,7 @@
             name = '';
             email = '';
             message = '';
+            alreadyUsed = true;
         } catch (error) {
             showToast(error?.message || 'Something went wrong');
         }
@@ -50,7 +51,7 @@
 </script>
 
 <div class="section contact-section">
-    <h2 class="gradient-text" style="max-width: 600px; margin: 2rem auto;">If you'd like to sent me a message</h2>
+    <h2 class="gradient-text" style="max-width: 700px; margin: 2rem auto;">If you'd like to sent me a message</h2>
     <form on:submit={handleSubmit} class="contact-form">
         <div class="form-group">
             <label for="name">Contact name</label>
@@ -59,6 +60,7 @@
                     id="name"
                     bind:value={name}
                     required
+                    disabled={alreadyUsed}
                     placeholder="First name + Last name"
             />
         </div>
@@ -70,6 +72,7 @@
                     id="email"
                     bind:value={email}
                     required
+                    disabled={alreadyUsed}
                     placeholder="your@email.com"
             />
         </div>
@@ -80,12 +83,23 @@
                     id="message"
                     bind:value={message}
                     required
+                    disabled={alreadyUsed}
                     placeholder="Your message here..."
                     rows="4"
             ></textarea>
         </div>
         <div class="form-group">
-            <span style="margin: 1rem 0; font-size: medium; font-style: italic">If everything is good, i'll check your message asap</span>
+            <p style="margin: 1rem 0; font-size: medium; font-style: italic">
+                {#if alreadyUsed}
+                    <span style="color: var(--primary);">
+                        Thanks for the message, i'll be answering you via email.<br/>
+                        <b>Please consider that this is a direct message service, so avoid spam</b>
+                    </span>
+                {:else}
+                    <span></span>
+                    If everything is good, i'll check your message asap
+                {/if}
+            </p>
         </div>
 
         <div class="bottom-group">
@@ -95,6 +109,7 @@
                            type="checkbox"
                            bind:value={terms_conditions}
                            required
+                           disabled={alreadyUsed}
                            checked={terms_conditions}/>
                     <span>I agree to the <a href="/documents/terms-conditions.pdf">terms and conditions</a></span>
                 </label>
@@ -102,6 +117,7 @@
                 <label class="check-agreement-group" for="contact_me">
                     <input id="contact_me"
                            type="checkbox"
+                           disabled={alreadyUsed}
                            bind:value={contacted}
                            checked={contacted}/>
                     I'm ok being contacted by email
