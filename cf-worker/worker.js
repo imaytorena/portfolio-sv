@@ -45,7 +45,7 @@ export default {
                     body: JSON.stringify({
                         username: username,
                         avatar_url: `https://avatar.iran.liara.run/username?username=${initials[0]}+${initials[1] ? initials[1] : name[1] ?? ""}`,
-                        content: `\`${email}\``
+                        content: `\`${email}\`\n\n${message}\n\n`
                     })
                 });
                 if (!discordMessage.ok) {
