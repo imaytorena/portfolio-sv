@@ -289,4 +289,10 @@
         justify-content: center;
         margin-top: 2rem;
     }
+
+    @media (max-width: 768px) {
+        .decorative-plants {
+            opacity: 0.3;
+        }
+    }
 </style>
