@@ -4,6 +4,8 @@
     export let projects: Array<{
         title: string;
         description: string;
+        active?: boolean;
+        deprecated?: boolean;
         tools: Array<{
             name: string;
             icon: string;
@@ -28,7 +30,7 @@
     />
 </svelte:head>
 
-<div class="section">
+<div class="section" style="position: relative;">
     <h2 class="gradient-text">Some of my work</h2>
     <div class="projects">
         {#each projects as project}
@@ -39,20 +41,55 @@
                     on:click={() => toggleProject(project.title)}
                 >
                     <div class="header-content">
-                        <h3 class="project-title">{project.title}</h3>
+                        <div style="display: inline-block;">
+                            <h3 class="project-title">{project.title}
+                            </h3>
+                            {#if project.active}
+                                <div style="display: inline-block;">
+                                    <span style="font-style: italic; font-weight: 400; font-size: 0.8rem; color: var(--primary);">currently working on</span>
+                                </div>
+                            {:else if project.deprecated}
+                                <div style="display: inline-block;">
+                                    <span style="font-style: italic; font-weight: 400; font-size: 0.8rem; color: #C78181;">deprecated</span>
+                                </div>
+                            {/if}
+                        </div>
                         <div class="tools">
                             {#each project.tools as tool}
                                 <i class={tool.icon} title={tool.name}></i>
                             {/each}
                         </div>
                     </div>
-                    <i class="expand-icon">▼</i>
+                    <i class="expand-icon">
+                        {#if expandedProject === project.title}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    fill="var(--primary)"
+                                    d="M16.59 5.41L15.17 4L12 7.17L8.83 4L7.41 5.41L12 10m-4.59 8.59L8.83 20L12 16.83L15.17 20l1.41-1.41L12 14z"
+                                /></svg>
+                        {:else}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    fill="var(--secondary)"
+                                    d="M12 18.17L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15M12 5.83L15.17 9l1.41-1.41L12 3L7.41 7.59L8.83 9z"
+                                /></svg
+                            >
+                        {/if}
+                    </i>
                 </button>
 
                 {#if expandedProject === project.title}
                     <div class="project-content" transition:slide>
                         <div class="project-image">
-                            <img src={project.image} alt={project.title} />
+                            <iframe src={project.url} title={project.title} style="width: 100%; height: 100%"></iframe>
                         </div>
 
                         <p class="project-description">{project.description}</p>
@@ -72,15 +109,20 @@
                             rel="noopener noreferrer"
                             class="project-link"
                         >
-                            <span
-                                >Go to the site <b><i>{project.site}</i></b
-                                ></span
-                            >
+                            <span>Go to the site </span>
+                            <span>
+                                <b><i>{project.site}</i></b>
+                            </span>
                         </a>
                     </div>
                 {/if}
             </div>
         {/each}
+    </div>
+    <div class="decorative-plants">
+        <img src="/images/c7a109d6ec05.png" alt="Decorative image"
+        aria-hidden="true"
+        style="height: 300px;" />
     </div>
 </div>
 
@@ -109,11 +151,18 @@
         background: none;
         border: none;
         cursor: pointer;
-        transition: background-color 0.2s ease;
+        /* transition: background-color 0.2s ease; */
     }
+    .project-header .header-content {
+        @media (max-width: 640px) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    } 
 
-    .project-header:hover {
-        background-color: var(--highlight);
+    .project-header:hover .project-title {
+        color: var(--primary);
+        /* background-color: var(--highlight); */
     }
 
     .header-content {
@@ -129,14 +178,14 @@
         color: var(--text);
     }
 
-    .tools {
+    .tools { 
         display: flex;
-        gap: 0.5rem;
+        gap: 0.3rem;
         align-items: center;
     }
 
     .tools i {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         opacity: 0.8;
         transition: opacity 0.2s ease;
     }
@@ -164,7 +213,7 @@
 
     .project-image {
         width: 100%;
-        height: 200px;
+        height: 500px;
         border-radius: 0.5rem;
         overflow: hidden;
     }
@@ -216,13 +265,28 @@
         color: var(--primary);
         text-decoration: none;
         font-weight: 500;
-        transition: color 0.2s ease;
-        width: max-content;
+        font-size: 1rem;
+        transition: color 0.2s ease; 
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        flex-wrap: wrap;
+        font-weight: 400;
+        width: 100%;
     }
 
     .project-link:hover {
         text-decoration: underline;
         /* font-weight: bold; */
         /* transform: translateY(-2px); */
+    }
+    .decorative-plants {
+        position: absolute;
+        top: calc(0px - 2rem);
+        right: 0;
+        z-index: -1;  
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
     }
 </style>

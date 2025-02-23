@@ -1,14 +1,12 @@
 <script lang="ts">
     // import Fa from 'svelte-fa';
     // import {faStar} from '@fortawesome/free-solid-svg-icons';
-    import {showToast} from './external/toast';
+    import { showToast } from "./external/toast";
 
-    let name = '';
-    let email = '';
-    let message = '';
-    let terms_conditions = false;
-    let contacted = true;
-    let turnstile_token = '';
+    let name = "";
+    let email = "";
+    let message = ""; 
+    let turnstile_token = "";
     let alreadyUsed = false;
 
     async function handleSubmit(e: Event) {
@@ -17,26 +15,34 @@
         try {
             const new_token = turnstile?.getResponse("#turnstile-container");
             const source = await fetch(import.meta.env.VITE_VALIDATION_URL, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'cf-turnstile-token': new_token
+                    "Content-Type": "application/json",
+                    "cf-turnstile-token": new_token,
                 },
-                body: JSON.stringify({name, email, message, terms_conditions, contacted})
+                body: JSON.stringify({
+                    name,
+                    email,
+                    message
+                }),
             });
-            const response = await source.json();
-            console.log(source);
-            showToast(response?.message || `Message ${!source.ok ? 'was not ' : ''}sent successfully`, source.ok ? 'success' : 'error');
-            name = '';
-            email = '';
-            message = '';
+            const response = await source.json(); 
+            showToast(
+                response?.message ||
+                    `Message ${!source.ok ? "was not " : ""}sent successfully`,
+                source.ok ? "success" : "error",
+            );
+            name = "";
+            email = "";
+            message = "";
             alreadyUsed = true;
         } catch (error) {
-            showToast(error?.message || 'Something went wrong');
+            showToast(error?.message || "Something went wrong");
         }
     }
 
-    $: isFormValid = name && email && message && terms_conditions && turnstile_token;
+    $: isFormValid =
+        name && email && message && turnstile_token;
 
     const widgetId = turnstile?.ready(function () {
         turnstile.render("#turnstile-container", {
@@ -46,90 +52,105 @@
                 turnstile_token = token;
             },
         });
-    });
-    console.log(widgetId);
+    }); 
 </script>
 
-<div class="section contact-section">
-    <h2 class="gradient-text" style="max-width: 700px; margin: 2rem auto;">If you'd like to sent me a message</h2>
+<div class="section" style="position: relative;">
+    <h2 class="gradient-text">If you'd like to sent me a message</h2>
     <form on:submit={handleSubmit} class="contact-form">
-        <div class="form-group">
-            <label for="name">Contact name</label>
-            <input
+        <div class="contact-form-group-1">
+            <div class="form-group">
+                <label for="name">Your name</label>
+                <input
                     type="text"
                     id="name"
                     bind:value={name}
                     required
                     disabled={alreadyUsed}
                     placeholder="First name + Last name"
-            />
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email address</label>
-            <input
+                />
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input
                     type="email"
                     id="email"
                     bind:value={email}
                     required
                     disabled={alreadyUsed}
                     placeholder="your@email.com"
-            />
+                />
+            </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="width: calc(100% - 15rem)">
             <label for="message">Message</label>
             <textarea
-                    id="message"
-                    bind:value={message}
-                    required
-                    disabled={alreadyUsed}
-                    placeholder="Your message here..."
-                    rows="4"
+                id="message"
+                bind:value={message}
+                required
+                disabled={alreadyUsed}
+                placeholder="Your message here..."
+                rows="4"
             ></textarea>
         </div>
-        <div class="form-group">
-            <p style="margin: 1rem 0; font-size: medium; font-style: italic">
-                {#if alreadyUsed}
-                    <span style="color: var(--primary);">
-                        Thanks for the message, i'll be answering you via email.<br/>
-                        <b>Please consider that this is a direct message service, so avoid spam</b>
-                    </span>
-                {:else}
-                    <span></span>
-                    If everything is good, i'll check your message asap
-                {/if}
-            </p>
-        </div>
+        <div
+            style="display: flex; flex-direction: row; align-items: space-between;"
+        >
+            <div style="display: flex-direction: column;">
 
-        <div class="bottom-group">
-            <div class="checkboxes">
-                <label class="check-agreement-group" for="terms_conditions">
-                    <input id="terms_conditions"
-                           type="checkbox"
-                           bind:value={terms_conditions}
-                           required
-                           disabled={alreadyUsed}
-                           checked={terms_conditions}/>
-                    <span>I agree to the <a href="/documents/terms-conditions.pdf">terms and conditions</a></span>
-                </label>
-
-                <label class="check-agreement-group" for="contact_me">
-                    <input id="contact_me"
-                           type="checkbox"
-                           disabled={alreadyUsed}
-                           bind:value={contacted}
-                           checked={contacted}/>
-                    I'm ok being contacted by email
-                </label>
+                <div
+                    class="form-group"
+                    style="display: flex; align-items: flex-start;"
+                >
+                    <div
+                        id="turnstile-container"
+                        class="turnstile-container"
+                        data-sitekey={import.meta.env.VITE_TURNSTILE_KEY}
+                        data-callback="javascriptCallback"
+                    ></div>
+                </div>
+                <div class="form-group">
+                    <p
+                        style="margin: 1rem 0; font-size: medium; font-style: italic"
+                    >
+                        {#if alreadyUsed}
+                            <span style="color: var(--primary);">
+                                Thanks for the message, i'll be answering you
+                                via email.<br />
+                                <b
+                                    >Please consider that this is a direct
+                                    message service, so avoid spam</b
+                                >
+                            </span>
+                        {:else}
+                            <b
+                                >If everything is good, i'll check your message
+                                asap 👍</b
+                            >
+                            <br />
+                            <span
+                                style="font-style: italic; font-size: 0.8rem; color: var(--primary);"
+                            >
+                                By clicking the button below, you agree to the <a
+                                    style="color: var(--primary);"
+                                    href="/documents/terms-conditions.pdf"
+                                    >terms and conditions</a
+                                >
+                            </span>
+                        {/if}
+                    </p>
+                </div>
             </div>
-            <div
-                    id="turnstile-container"
-                    class="turnstile-container"
-                    data-sitekey={import.meta.env.VITE_TURNSTILE_KEY}
-                    data-callback="javascriptCallback"
-            ></div>
+
         </div>
+        <img
+            src="/images/oafbrnva12sd.png"
+            alt="Decorative image"
+            aria-hidden="true"
+            class="contact-form-decorative-plant"
+        />
+        <span style="font-style: italic; font-size: 0.8rem;">/ᐠ ̥  ̮  ̥ᐟ\ฅ</span>
         <button type="submit" class="submit-btn" disabled={!isFormValid}>
             Send message
         </button>
@@ -137,16 +158,12 @@
 </div>
 
 <style>
-    .contact-section {
-        background: linear-gradient(135deg, rgba(70, 53, 177, 0.05), rgba(183, 113, 229, 0.05));
-    }
-
     .contact-form {
-        max-width: 700px;
-        margin: 2rem auto;
+        margin-top: 2rem;
     }
 
     .form-group {
+        width: 100%;
         margin-bottom: 1.5rem;
     }
 
@@ -157,7 +174,8 @@
         font-weight: 500;
     }
 
-    input, textarea {
+    input,
+    textarea {
         width: 100%;
         padding: 0.75rem;
         border: 2px solid rgba(70, 53, 177, 0.1);
@@ -166,7 +184,8 @@
         transition: all 0.3s ease;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
         outline: none;
         border-color: var(--primary);
         box-shadow: 0 0 0 3px rgba(70, 53, 177, 0.1);
@@ -195,23 +214,6 @@
         cursor: not-allowed;
     }
 
-    .bottom-group {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        justify-content: space-around;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        font-size: 1.2rem;
-    }
-
-    @media (max-width: 640px) {
-        .bottom-group {
-            flex-wrap: wrap;
-        }
-    }
-
-
     .turnstile-container {
         display: flex;
         justify-content: center;
@@ -223,25 +225,29 @@
         }
     }
 
-    .check-agreement-group {
+    .contact-form-group-1 {
+        width: 100%;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Inter', sans-serif;
         gap: 1rem;
+        @media (max-width: 640px) {
+            flex-wrap: wrap;
+            gap: 0rem;
+        }
     }
 
-    .checkboxes {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+    .contact-form-decorative-plant {
+        width: 15rem; 
+        position: absolute; 
+        /* .8 + .8 + 1rem calc */
+        bottom: calc(2.5rem + 32px); 
+        z-index: 1; 
+        right: 0;
     }
-
-
-    .check-agreement-group input {
-        width: min-content;
-        transform: scale(1.3);
-        font-size: 1.5rem;
-        margin-bottom: 4px;
+    @media (max-width: 768px) {
+        .contact-form-decorative-plant {
+            bottom: calc(2rem + 32px);
+            z-index: -1;
+            opacity: 0.3;
+        }
     }
 </style>
