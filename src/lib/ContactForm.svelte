@@ -5,7 +5,7 @@
 
     let name = "";
     let email = "";
-    let message = ""; 
+    let message = "";
     let turnstile_token = "";
     let alreadyUsed = false;
 
@@ -23,10 +23,10 @@
                 body: JSON.stringify({
                     name,
                     email,
-                    message
+                    message,
                 }),
             });
-            const response = await source.json(); 
+            const response = await source.json();
             showToast(
                 response?.message ||
                     `Message ${!source.ok ? "was not " : ""}sent successfully`,
@@ -41,8 +41,7 @@
         }
     }
 
-    $: isFormValid =
-        name && email && message && turnstile_token;
+    $: isFormValid = name && email && message && turnstile_token;
 
     const widgetId = turnstile?.ready(function () {
         turnstile.render("#turnstile-container", {
@@ -52,7 +51,7 @@
                 turnstile_token = token;
             },
         });
-    }); 
+    });
 </script>
 
 <div class="section" style="position: relative;">
@@ -83,7 +82,7 @@
             </div>
         </div>
 
-        <div class="form-group" style="width: calc(100% - 15rem)">
+        <div class="form-group contact-form-message">
             <label for="message">Message</label>
             <textarea
                 id="message"
@@ -94,55 +93,40 @@
                 rows="4"
             ></textarea>
         </div>
-        <div
-            style="display: flex; flex-direction: row; align-items: space-between;"
-        >
-            <div style="display: flex-direction: column;">
-
-                <div
-                    class="form-group"
-                    style="display: flex; align-items: flex-start;"
-                >
-                    <div
-                        id="turnstile-container"
-                        class="turnstile-container"
-                        data-sitekey={import.meta.env.VITE_TURNSTILE_KEY}
-                        data-callback="javascriptCallback"
-                    ></div>
-                </div>
-                <div class="form-group">
-                    <p
-                        style="margin: 1rem 0; font-size: medium; font-style: italic"
+        <div class="form-group turnstile-container-box">
+            <div
+                id="turnstile-container"
+                class="turnstile-container"
+                data-sitekey={import.meta.env.VITE_TURNSTILE_KEY}
+                data-callback="javascriptCallback"
+            ></div>
+        </div>
+        <div class="form-group">
+            <p style="margin: 1rem 0; font-size: medium; font-style: italic">
+                {#if alreadyUsed}
+                    <span style="color: var(--primary);">
+                        Thanks for the message, i'll be answering you via email.<br
+                        />
+                        <b
+                            >Please consider that this is a direct message
+                            service, so avoid spam</b
+                        >
+                    </span>
+                {:else}
+                    <b>If everything is good, i'll check your message asap 👍</b
                     >
-                        {#if alreadyUsed}
-                            <span style="color: var(--primary);">
-                                Thanks for the message, i'll be answering you
-                                via email.<br />
-                                <b
-                                    >Please consider that this is a direct
-                                    message service, so avoid spam</b
-                                >
-                            </span>
-                        {:else}
-                            <b
-                                >If everything is good, i'll check your message
-                                asap 👍</b
-                            >
-                            <br />
-                            <span
-                                style="font-style: italic; font-size: 0.8rem; color: var(--primary);"
-                            >
-                                By clicking the button below, you agree to the <a
-                                    style="color: var(--primary);"
-                                    href="/documents/terms-conditions.pdf"
-                                    >terms and conditions</a
-                                >
-                            </span>
-                        {/if}
-                    </p>
-                </div>
-            </div>
-
+                    <br />
+                    <span
+                        style="font-style: italic; font-size: 0.8rem; color: var(--primary);"
+                    >
+                        By clicking the button below, you agree to the <a
+                            style="color: var(--primary);"
+                            href="/documents/terms-conditions.pdf"
+                            >terms and conditions</a
+                        >
+                    </span>
+                {/if}
+            </p>
         </div>
         <img
             src="/images/oafbrnva12sd.png"
@@ -150,7 +134,7 @@
             aria-hidden="true"
             class="contact-form-decorative-plant"
         />
-        <span style="font-style: italic; font-size: 0.8rem;">/ᐠ ̥  ̮  ̥ᐟ\ฅ</span>
+        <span style="font-style: italic; font-size: 0.8rem;">/ᐠ ̥ ̮ ̥ᐟ\ฅ</span>
         <button type="submit" class="submit-btn" disabled={!isFormValid}>
             Send message
         </button>
@@ -219,12 +203,6 @@
         justify-content: center;
     }
 
-    @media (max-width: 400px) {
-        .turnstile-container {
-            overflow: auto;
-        }
-    }
-
     .contact-form-group-1 {
         width: 100%;
         display: flex;
@@ -234,13 +212,27 @@
             gap: 0rem;
         }
     }
+    .contact-form-message {
+        width: calc(100% - 15rem);
+        @media (max-width: 640px) {
+            width: 100%;
+        }
+    }
+    .turnstile-container-box {
+        width: max-content;
+    }
 
+    @media (max-width: 400px) {
+        .turnstile-container-box {
+            scale: 80%;
+        }
+    }
     .contact-form-decorative-plant {
-        width: 15rem; 
-        position: absolute; 
+        width: 15rem;
+        position: absolute;
         /* .8 + .8 + 1rem calc */
-        bottom: calc(2.5rem + 32px); 
-        z-index: 1; 
+        bottom: calc(2.5rem + 32px);
+        z-index: 1;
         right: 0;
     }
     @media (max-width: 768px) {
