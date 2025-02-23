@@ -44,18 +44,12 @@
     font-size: 1.1rem;
     max-width: 600px;
   }
-
-  .image-container {
-    flex-shrink: 0;
-  }
+ 
 
   img {
     width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid var(--primary);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    height: 300px; 
+    object-fit: scale-down; 
   }
 
   @media (max-width: 768px) {

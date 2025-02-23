@@ -1,8 +1,8 @@
 :root {
-  --primary: #4635B1;
-  --secondary: #B771E5;
+  --primary: #4A6741;
+  --secondary: #9AC184;
   --accent: #AEEA94;
-  --highlight: #FFFBCA;
+  --highlight: #FBF9F6;
   --bg: #ffffff;
   --text: #333333;
 }
@@ -35,7 +35,7 @@ main {
   margin-bottom: 4rem;
   padding: 2rem;
   border-radius: 1rem;
-  background: rgba(70, 53, 177, 0.03);
+  border: 1px solid var(--primary);
 }
 
 .gradient-text {
