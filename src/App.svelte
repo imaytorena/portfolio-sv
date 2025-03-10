@@ -99,7 +99,7 @@
     }
   ];
 
-  const cvUrl = "/documents/cv.pdf";
+  const cvUrl = "/documents/JavierMaytorenaResume.pdf";
 </script>
 
 <Navbar {socialLinks} {cvUrl} />
