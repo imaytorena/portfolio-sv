@@ -31,7 +31,7 @@
 </svelte:head>
 
 <div class="section" style="position: relative;">
-    <h2 class="gradient-text">Some of my work</h2>
+    <h2 class="gradient-text">Some of my personal work</h2>
     <div class="projects">
         {#each projects as project}
             <div class="project-accordion">

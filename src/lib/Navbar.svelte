@@ -1,9 +1,8 @@
 <script lang="ts">
-  import Fa from 'svelte-fa';
   import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
   import { faEnvelope, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 
-  export let cvUrl: string ;
+  export let resumeUrl: string ;
   export let socialLinks: Array<{
     name: string;
     url: string;
@@ -31,7 +30,7 @@
         </svg>
     </a>
     <div class="nav-links">
-      <a href={cvUrl} target="_blank" rel="noopener noreferrer" class="cv-link">
+      <a href={resumeUrl} target="_blank" rel="noopener noreferrer" class="cv-link">
         <Fa icon={faFileAlt} /> CV
       </a>
       {#each socialLinks as link}
