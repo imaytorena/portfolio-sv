@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Fa from 'svelte-fa';
   import { faGithub, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
   import { faEnvelope, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 
