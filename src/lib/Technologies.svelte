@@ -86,8 +86,9 @@
         display: flex;
         gap: 1rem;
         align-self: center;
+        justify-content: center;
+        flex-wrap: wrap;
     }
-
     .filter_button {
         display: flex;
         align-items: center;

@@ -22,7 +22,7 @@
   <Projects {projects} />
   <div class="section badges">
     <h2 class="gradient-text">Badges & Certifications</h2>
-    <div style="display: flex; align-items: center; margin-top: 1rem; gap: 1rem;">
+    <div style="display: flex; align-items: center; justify-content: flex-start; flex-wrap: wrap; margin-top: 1rem; gap: 1rem;">
       <a href="https://www.credly.com/badges/790a08df-33ca-410c-86da-d578f86dd959/public_url">
         <img src="/images/badges/aws-certified-cloud-practitioner.png" />
       </a>
